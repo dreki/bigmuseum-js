@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  # From `Dockerfile` in current directory
+  bigmuseum:
+    container_name: bigmuseum
+    hostname: bigmuseum
+    build:
+      context: .
+    # Host port 8000, container port 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container, so Node ignores it
