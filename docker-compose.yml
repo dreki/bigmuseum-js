@@ -4,6 +4,9 @@ services:
   bigmuseum:
     container_name: bigmuseum
     hostname: bigmuseum
+    # Pass environment from .env
+    env_file:
+      - .env
     build:
       context: .
     # Host port 8000, container port 3000
