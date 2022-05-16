@@ -1,19 +1,20 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import { useSession, signIn, signOut } from 'next-auth/react'
+// import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Home: NextPage = () => {
-  const { data: session } = useSession()
-  if (session) {
-    console.log(session)
-  }
-  if (!session) {
-    return <>
-      <button onClick={() => signIn()}>Sign In</button>
-    </>
-  }
+  // const { data: session } = useSession()
+  // if (session) {
+  //   console.log(session)
+  // }
+  // if (!session) {
+  //   return <>
+  //     <button onClick={() => signIn()}>Sign In</button>
+  //   </>
+  // }
   return (
     <div className={styles.container}>
       <Head>
@@ -27,6 +28,9 @@ const Home: NextPage = () => {
           Hello world!
         </h1>
         <h1>Cool!</h1>
+        <Link href="/api/auth/start">
+          <a>Log in</a>
+        </Link>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
