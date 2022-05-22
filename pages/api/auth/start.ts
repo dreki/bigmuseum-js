@@ -1,31 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from 'iron-session/next';
+import { IRON_SESSION_CONFIG } from "lib/config";
+import { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
     name: string;
 };
 
-// If `process.env.SESSION_PASSWORD is missing, raise an error.
-if (!process.env.SESSION_PASSWORD) {
-    throw new Error('SESSION_PASSWORD environment variable is missing');
-}
-
-declare module 'iron-session' {
-    // export interface Session {
-    //     state: string;
-    // }
-    interface IronSessionData {
-        state: string;
-    }
-}
-
-export default withIronSessionApiRoute(handler, {
-    cookieName: 'bigmuseum-session',
-    password: process.env.SESSION_PASSWORD,
-    cookieOptions: {
-        secure: process.env.NODE_ENV === 'production'
-    }
-});
+export default withIronSessionApiRoute(handler, IRON_SESSION_CONFIG);
 
 // Export handler
 // export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
@@ -37,6 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     const state = Math.random().toString(36).substring(2);
     req.session.state = state;
     // Redirect to Reddit auth.
+    console.log('> redirecting')
     res.writeHead(302, {
         Location: 'https://www.reddit.com/api/v1/authorize?' +
             `client_id=${process.env.REDDIT_CLIENT_ID}` +
@@ -46,5 +28,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
             '&duration=permanent' +
             '&scope=identity'
     });
-    res.status(200).json({ name: 'John Doe' })
+    res.end();
+    // res.status(200).json({ name: 'John Doe' })
 }
