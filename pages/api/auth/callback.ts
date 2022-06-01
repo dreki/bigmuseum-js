@@ -38,11 +38,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Get user info.
     await reddit.getMe().then(async (user: RedditUser) => {
         // Log user info.
-        console.log(`> user ${JSON.stringify(user)}`);
+        console.log(`> user:`);
+        console.log(JSON.stringify(user, null, 2))
         // Get user's subreddits.
         // const subreddits: Subreddit[] = await user.getSubscriptions();
         // Log user's subreddits.
         // console.log(`> subreddits ${JSON.stringify(subreddits)}`);
+        
+        req.session.redditUserId = user.id;
+        console.log(`> session:`);
+        console.log(JSON.stringify(req.session, null, 2));
+        await req.session.save();
     });
     // const user: RedditUser = await reddit.getMe();
     // console.log(user);

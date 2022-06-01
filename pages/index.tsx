@@ -1,3 +1,5 @@
+import { withIronSessionSsr } from 'iron-session/next'
+import { IRON_SESSION_CONFIG } from 'lib/config'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -5,7 +7,12 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 // import { useSession, signIn, signOut } from 'next-auth/react'
 
-const Home: NextPage = () => {
+const Home: NextPage = (session) => {
+  console.log(`> session:`)
+  console.log(session);
+  
+  
+  
   // const { data: session } = useSession()
   // if (session) {
   //   console.log(session)
@@ -86,5 +93,18 @@ const Home: NextPage = () => {
     </div>
   )
 }
+
+async function _getServerSideProps(context) {
+  console.log(`> _getServerSideProps:`);
+  console.log(context.req.session);
+  
+  return {
+    props: {
+      session: context.req.session.redditUserId
+    }
+  }
+}
+export const getServerSideProps = withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG)
+// export { withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG) as getServerSideProps }
 
 export default Home

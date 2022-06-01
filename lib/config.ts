@@ -7,6 +7,7 @@ declare module 'iron-session' {
     // }
     interface IronSessionData {
         state: string;
+        redditUserId: string;
     }
 }
 
