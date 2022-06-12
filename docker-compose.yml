@@ -15,3 +15,21 @@ services:
     volumes:
       - .:/app
       - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container, so Node ignores it
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=crazy-squint-precook-saline
+      - MONGO_INITDB_DATABASE=bigmuseum
+  # mongodb:
+  #   container_name: mongodb
+  #   hostname: mongodb
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container, so Node ignores it
