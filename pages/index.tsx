@@ -1,5 +1,5 @@
 import { withIronSessionSsr } from 'iron-session/next'
-import { IRON_SESSION_CONFIG } from 'lib/config'
+import { IRON_SESSION_CONFIG, Session } from 'lib/config'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -7,12 +7,28 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 // import { useSession, signIn, signOut } from 'next-auth/react'
 
-const Home: NextPage = (session) => {
-  console.log(`> session:`)
-  console.log(session);
-  
-  
-  
+interface Props {
+  // session: any;
+  accessToken: string;
+  refreshToken: string;
+  redditUserId: any;
+  // coolStuff: string;
+}
+
+// const Home: NextPage<Props> = ({session, redditId, coolStuff}) => {
+const Home: NextPage<Props> = (props) => {
+  // console.log(`> session:`)
+  // console.log(session);
+  // console.log(`> redditId:`);
+  // console.log(redditId);
+  // console.log(`> coolStuff: ${coolStuff}`);
+  console.log(`> props:`);
+  console.log(props);
+
+
+
+
+
   // const { data: session } = useSession()
   // if (session) {
   //   console.log(session)
@@ -94,15 +110,19 @@ const Home: NextPage = (session) => {
   )
 }
 
-async function _getServerSideProps(context) {
-  console.log(`> _getServerSideProps:`);
+async function _getServerSideProps(context: { req: { session: Session } }): Promise<{ props: any }> {
+  console.log(`> _getServerSideProps, context.req.session:`);
   console.log(context.req.session);
-  
-  return {
-    props: {
-      session: context.req.session.redditUserId
-    }
-  }
+  // console.log(`> context:`);
+  // console.log(context);
+
+
+  const props: Props = {
+    redditUserId: context.req.session.redditUserId,
+    accessToken: context.req.session.accessToken,
+    refreshToken: context.req.session.refreshToken,
+  };
+  return { props }
 }
 export const getServerSideProps = withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG)
 // export { withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG) as getServerSideProps }

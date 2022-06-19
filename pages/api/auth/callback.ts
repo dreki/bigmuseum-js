@@ -45,6 +45,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         // Log user's subreddits.
         // console.log(`> subreddits ${JSON.stringify(subreddits)}`);
         
+        req.session.accessToken = access_token;
+        req.session.refreshToken = refresh_token;
         req.session.redditUserId = user.id;
         console.log(`> session:`);
         console.log(JSON.stringify(req.session, null, 2));
