@@ -1,13 +1,18 @@
 import 'iron-session';
 import { IronSessionOptions } from 'iron-session';
 
+interface Session {
+    state: string;
+    redditUserId: string;
+    accessToken: string;
+    refreshToken: string;
+}
+
 declare module 'iron-session' {
     // export interface Session {
     //     state: string;
     // }
-    interface IronSessionData {
-        state: string;
-        redditUserId: string;
+    interface IronSessionData extends Session {
     }
 }
 
@@ -24,4 +29,4 @@ const IRON_SESSION_CONFIG: IronSessionOptions = {
     }
 };
 
-export { IRON_SESSION_CONFIG };
+export { IRON_SESSION_CONFIG, Session };
