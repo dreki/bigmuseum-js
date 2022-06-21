@@ -1,43 +1,31 @@
+import Authentication from 'components/Authentication'
 import { withIronSessionSsr } from 'iron-session/next'
 import { IRON_SESSION_CONFIG, Session } from 'lib/config'
+import Reddit from 'lib/reddit'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { RedditUser } from 'snoowrap'
 import styles from '../styles/Home.module.css'
 // import { useSession, signIn, signOut } from 'next-auth/react'
+// import snoowrap, { RedditUser, Subreddit } from 'snoowrap';
 
 interface Props {
-  // session: any;
-  accessToken: string;
-  refreshToken: string;
-  redditUserId: any;
-  // coolStuff: string;
+  // Username (optional)
+  username?: string,
+  userIsLoggedIn: boolean
 }
 
 // const Home: NextPage<Props> = ({session, redditId, coolStuff}) => {
 const Home: NextPage<Props> = (props) => {
-  // console.log(`> session:`)
-  // console.log(session);
-  // console.log(`> redditId:`);
-  // console.log(redditId);
-  // console.log(`> coolStuff: ${coolStuff}`);
-  console.log(`> props:`);
-  console.log(props);
+
+  useEffect(() => {
+  })
 
 
 
-
-
-  // const { data: session } = useSession()
-  // if (session) {
-  //   console.log(session)
-  // }
-  // if (!session) {
-  //   return <>
-  //     <button onClick={() => signIn()}>Sign In</button>
-  //   </>
-  // }
   return (
     <div className={styles.container}>
       <Head>
@@ -51,9 +39,9 @@ const Home: NextPage<Props> = (props) => {
           Hello world!
         </h1>
         <h1>Cool!</h1>
-        <Link href="/api/auth/start">
-          <a>Log in</a>
-        </Link>
+        <Authentication
+          userIsLoggedIn={props.userIsLoggedIn}
+          username={props.username} />
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -116,12 +104,24 @@ async function _getServerSideProps(context: { req: { session: Session } }): Prom
   // console.log(`> context:`);
   // console.log(context);
 
+  // TODO: Load Reddit data from the backend, since the env vars are only on the server.
+  const reddit: Reddit = new Reddit(
+    context.req.session.accessToken,
+    context.req.session.refreshToken
+  )
+  let userIsLoggedIn = false;
+  // username (optional)
+  let username: string | undefined;
+  await reddit.getMe().then(async (user: RedditUser) => {
+    userIsLoggedIn = true;
+    username = user.name;
+  }).catch(console.error);
 
   const props: Props = {
-    redditUserId: context.req.session.redditUserId,
-    accessToken: context.req.session.accessToken,
-    refreshToken: context.req.session.refreshToken,
+    userIsLoggedIn,
+    username
   };
+
   return { props }
 }
 export const getServerSideProps = withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG)
