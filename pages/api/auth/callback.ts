@@ -1,7 +1,6 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { IRON_SESSION_CONFIG } from "lib/config";
 import { NextApiRequest, NextApiResponse } from "next";
-// Import snoowrap
 import snoowrap, { RedditUser, Subreddit } from 'snoowrap';
 
 export default withIronSessionApiRoute(handler, IRON_SESSION_CONFIG)
@@ -22,11 +21,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         body: `grant_type=authorization_code&code=${code}&redirect_uri=http://localhost:3000/api/auth/callback`
     });
     const { access_token, refresh_token } = await response.json();
-    // Log access token.
-    console.log(`> access_token ${access_token}`);
-    // Log refresh token.
-    console.log(`> refresh_token ${refresh_token}`);
-
     // Init snoowrap
     const reddit = new snoowrap({
         userAgent: 'bigmuseum-app',
@@ -37,28 +31,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
     // Get user info.
     await reddit.getMe().then(async (user: RedditUser) => {
-        // Log user info.
-        console.log(`> user:`);
-        console.log(JSON.stringify(user, null, 2))
         // Get user's subreddits.
         // const subreddits: Subreddit[] = await user.getSubscriptions();
         // Log user's subreddits.
-        // console.log(`> subreddits ${JSON.stringify(subreddits)}`);
-        
+        // console.log(`> subreddits ${JSON.stringify(subreddits)}`);        
         req.session.accessToken = access_token;
         req.session.refreshToken = refresh_token;
         req.session.redditUserId = user.id;
-        console.log(`> session:`);
-        console.log(JSON.stringify(req.session, null, 2));
         await req.session.save();
     });
-    // const user: RedditUser = await reddit.getMe();
-    // console.log(user);
-
-    // Get `r/museum` subreddit.
-    // const subreddit: Subreddit = await reddit.getSubreddit('museum');
-    // console.log(subreddit);
-    
     
     // Return a generic 200
     res.status(200).json({ name: 'John Doe' })

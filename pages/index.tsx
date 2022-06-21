@@ -5,26 +5,19 @@ import Reddit from 'lib/reddit'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect } from 'react'
 import { RedditUser } from 'snoowrap'
 import styles from '../styles/Home.module.css'
-// import { useSession, signIn, signOut } from 'next-auth/react'
-// import snoowrap, { RedditUser, Subreddit } from 'snoowrap';
 
 interface Props {
-  // Username (optional)
   username?: string,
   userIsLoggedIn: boolean
 }
 
-// const Home: NextPage<Props> = ({session, redditId, coolStuff}) => {
 const Home: NextPage<Props> = (props) => {
 
   useEffect(() => {
   })
-
-
 
   return (
     <div className={styles.container}>
@@ -99,18 +92,11 @@ const Home: NextPage<Props> = (props) => {
 }
 
 async function _getServerSideProps(context: { req: { session: Session } }): Promise<{ props: any }> {
-  console.log(`> _getServerSideProps, context.req.session:`);
-  console.log(context.req.session);
-  // console.log(`> context:`);
-  // console.log(context);
-
-  // TODO: Load Reddit data from the backend, since the env vars are only on the server.
   const reddit: Reddit = new Reddit(
     context.req.session.accessToken,
     context.req.session.refreshToken
   )
   let userIsLoggedIn = false;
-  // username (optional)
   let username: string | undefined;
   await reddit.getMe().then(async (user: RedditUser) => {
     userIsLoggedIn = true;
@@ -125,6 +111,5 @@ async function _getServerSideProps(context: { req: { session: Session } }): Prom
   return { props }
 }
 export const getServerSideProps = withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG)
-// export { withIronSessionSsr(_getServerSideProps, IRON_SESSION_CONFIG) as getServerSideProps }
 
 export default Home
