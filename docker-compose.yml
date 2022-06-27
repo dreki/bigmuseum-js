@@ -1,5 +1,17 @@
 version: "3.8"
 services:
+  graphql:
+    container_name: graphql
+    hostname: graphql
+    # From ../graphql/Dockerfile
+    build:
+      context: ../graphql
+    # Expose GraphQL port
+    ports:
+      - "4000:4000"
+    volumes:
+      - ../graphql:/app
+      - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container, so Node ignores it
   # From `Dockerfile` in current directory
   bigmuseum:
     container_name: bigmuseum
@@ -17,6 +29,8 @@ services:
       - /app/node_modules  # Ensure `/app/node_modules` is always empty in the container, so Node ignores it
   mongodb:
     image: mongo
+    container_name: mongodb
+    hostname: mongodb
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
