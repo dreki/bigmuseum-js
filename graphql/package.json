@@ -1,0 +1,22 @@
+{
+  "name": "bigmuseum-graphql",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev_debug": "echo 'pwd: ' && pwd && find .",
+    "dev_defunct": "npx ts-node -r tsconfig-paths/register server.js",
+    "dev": "npx ts-node server.ts",
+    "dev_defunct2": "cd /app && ts-node server.ts"
+  },
+  "dependencies": {
+    "@graphql-yoga/node": "^2.9.2",
+    "graphql": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
+  }
+}
