@@ -36,3 +36,4 @@ yarn-error.log*
 
 # Project local
 .env
+pnpm-lock.yaml
