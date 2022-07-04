@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev_debug": "echo 'pwd: ' && pwd && find .",
-    "dev_defunct": "npx ts-node -r tsconfig-paths/register server.js",
-    "dev": "npx ts-node server.ts",
-    "dev_defunct2": "cd /app && ts-node server.ts"
+    "dev_ts-node": "npx ts-node server.ts",
+    "dev": "npx nodemon server.ts"
   },
   "dependencies": {
     "@graphql-yoga/node": "^2.9.2",
@@ -14,6 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
+    "nodemon": "^2.0.18",
     "ts-node": "^10.8.1",
     "tsconfig-paths": "^4.0.0",
     "tslib": "^2.4.0",
