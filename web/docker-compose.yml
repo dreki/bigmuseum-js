@@ -6,6 +6,9 @@ services:
     # From ../graphql/Dockerfile
     build:
       context: ../graphql
+    environment:
+      # Include MongoDB connection string, with credentials
+      - MONGO_URI=mongodb://admin:crazy-squint-precook-saline@mongodb:27017/admin
     # Expose GraphQL port
     ports:
       - "4000:4000"
@@ -36,6 +39,8 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=crazy-squint-precook-saline
       - MONGO_INITDB_DATABASE=bigmuseum
+    ports:
+      - "27017:27017"
   # mongodb:
   #   container_name: mongodb
   #   hostname: mongodb
